@@ -1,9 +1,22 @@
 defmodule TypeID.Base32 do
   import Bitwise
 
-  crockford_alphabet = ~c"0123456789abcdefghjkmnpqrstvwxyz"
+  crockford_alphabet = ~c"0123456789ABCDEFGHJKMNPQRSTVWXYZ"
 
-  encoded = for e1 <- crockford_alphabet, e2 <- crockford_alphabet, do: bsl(e1, 8) + e2
+  to_lower_enc = &Enum.map(&1, fn c -> if c in ?A..?Z, do: c - ?A + ?a, else: c end)
+  to_lower_dec =
+    &Enum.map(&1, fn {encoding, value} = pair ->
+      if encoding in ?A..?Z do
+        {encoding - ?A + ?a, value}
+      else
+        pair
+      end
+    end)
+
+  lower = to_lower_enc.(crockford_alphabet)
+
+
+  encoded = for e1 <- lower, e2 <- lower, do: bsl(e1, 8) + e2
 
   to_decode_list = fn alphabet ->
     alphabet = Enum.sort(alphabet)
@@ -14,8 +27,9 @@ defmodule TypeID.Base32 do
   end
 
   {min, decoded} =
-    crockford_alphabet
+    lower
     |> Enum.with_index()
+    |> to_lower_dec.()
     |> to_decode_list.()
 
   @spec encode(binary()) :: binary()
