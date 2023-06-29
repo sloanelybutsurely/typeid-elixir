@@ -1,11 +1,13 @@
-# TypeID
+# TypeID Elixir
 
-**TODO: Add description**
+### A type-safe, K-sortable, globally unique identifier inspired by Stripe IDs
+
+[TypeIDs](https://github.com/jetpack-io/typeid) are a modern, type-safe, globally unique identifier based on the upcoming UUIDv7 standard. They provide a ton of nice properties that make them a great choice as the primary identifiers for your data in a database, APIs, and distributed systems. Read more about TypeIDs in their spec.
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `typeid` to your list of dependencies in `mix.exs`:
+The package can be installed by adding `typeid` to your list of dependencies in
+`mix.exs`:
 
 ```elixir
 def deps do
@@ -14,8 +16,4 @@ def deps do
   ]
 end
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/typeid>.
 
