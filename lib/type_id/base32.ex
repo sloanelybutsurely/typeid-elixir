@@ -1,5 +1,11 @@
 defmodule TypeID.Base32 do
+  @moduledoc false
   import Bitwise
+
+  # Implements base 32 encoding using the a lowercase crockford alphabet
+  # https://www.crockford.com/base32.html
+
+  # Borrows heavily from the core `Base` module's implementation
 
   crockford_alphabet = ~c"0123456789ABCDEFGHJKMNPQRSTVWXYZ"
 
