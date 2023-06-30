@@ -1,5 +1,6 @@
 defmodule TypeIDTest do
   use ExUnit.Case
+  doctest TypeID, except: [new: 1]
 
   describe "new/1" do
     test "returns a new TypeID struct" do

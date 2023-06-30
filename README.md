@@ -17,3 +17,6 @@ def deps do
 end
 ```
 
+## Spec
+
+The original TypeID spec is defined [here](https://github.com/jetpack-io/typeid).
