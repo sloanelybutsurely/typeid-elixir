@@ -20,7 +20,7 @@ defmodule TypeID do
   ### Example
 
       iex> TypeID.new("acct")
-      TypeID.from_string!("acct_01h45y0sxkfmntta78gqs1vsw6")
+      #TypeID<"acct_01h45y0sxkfmntta78gqs1vsw6">
 
   """
   @spec new(prefix :: String.t()) :: t()
@@ -124,8 +124,10 @@ defmodule TypeID do
   Parses a `t:t/0` from a prefix and suffix. 
 
   ### Example
-      iex> TypeID.from("invoice", "01h45ydzqkemsb9x8gq2q7vpvb")
-      {:ok, TypeID.from_string!("invoice_01h45ydzqkemsb9x8gq2q7vpvb")}
+
+      iex> {:ok, tid} = TypeID.from("invoice", "01h45ydzqkemsb9x8gq2q7vpvb")
+      iex> tid
+      #TypeID<"invoice_01h45ydzqkemsb9x8gq2q7vpvb">
 
   """
   @spec from(prefix :: String.t(), suffix :: String.t()) :: {:ok, t()} | :error
@@ -149,8 +151,9 @@ defmodule TypeID do
 
   ### Example
 
-      iex> TypeID.from_string("game_01h45yhtgqfhxbcrsfbhxdsdvy")
-      {:ok, TypeID.from_string!("game_01h45yhtgqfhxbcrsfbhxdsdvy")}
+      iex> {:ok, tid} = TypeID.from_string("game_01h45yhtgqfhxbcrsfbhxdsdvy")
+      iex> tid
+      #TypeID<"game_01h45yhtgqfhxbcrsfbhxdsdvy">
 
   """
   @spec from_string(String.t()) :: {:ok, t()} | :error
@@ -174,8 +177,9 @@ defmodule TypeID do
 
   ### Example
 
-      iex> TypeID.from_uuid("device", "01890be9-b248-777e-964e-af1d244f997d")
-      {:ok, TypeID.from_string!("device_01h45ykcj8exz9cknf3mj4z6bx")}
+      iex> {:ok, tid} = TypeID.from_uuid("device", "01890be9-b248-777e-964e-af1d244f997d")
+      iex> tid
+      #TypeID<"device_01h45ykcj8exz9cknf3mj4z6bx">
 
   """
   @spec from_uuid(prefix :: String.t(), uuid :: String.t()) :: {:ok, t()} | :error
@@ -200,8 +204,9 @@ defmodule TypeID do
 
   ### Example
 
-      iex> TypeID.from_uuid_bytes("policy", <<1, 137, 11, 235, 83, 221, 116, 212, 161, 42, 205, 139, 182, 243, 175, 110>>)
-      {:ok, TypeID.from_string!("policy_01h45ypmyxekaa2apdhevf7bve")}
+      iex> {:ok, tid} = TypeID.from_uuid_bytes("policy", <<1, 137, 11, 235, 83, 221, 116, 212, 161, 42, 205, 139, 182, 243, 175, 110>>)
+      iex> tid
+      #TypeID<"policy_01h45ypmyxekaa2apdhevf7bve">
 
   """
   @spec from_uuid_bytes(prefix :: String.t(), uuid_bytes :: binary()) :: {:ok, t()} | :error
@@ -230,6 +235,6 @@ defimpl Inspect, for: TypeID do
   import Inspect.Algebra
 
   def inspect(tid, _opts) do
-    concat(["TypeID.from_string!(\"", tid.prefix, "_", tid.suffix, "\")"])
+    concat(["#TypeID<\"", tid.prefix, "_", tid.suffix, "\">"])
   end
 end
