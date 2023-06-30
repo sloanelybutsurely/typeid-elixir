@@ -104,7 +104,7 @@ defmodule TypeID do
   end
 
   defp validate_prefix!(prefix) do
-    unless prefix =~ ~r/[a-z]{0,63}/ do
+    unless prefix =~ ~r/^[a-z]{0,63}$/ do
       raise ArgumentError, "invalid prefix: #{prefix}. prefix should match [a-z]{0,63}"
     end
 
