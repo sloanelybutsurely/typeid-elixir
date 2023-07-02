@@ -73,6 +73,10 @@ defmodule TypeID do
 
   """
   @spec to_string(tid :: t()) :: String.t()
+  def to_string(%__MODULE__{prefix: "", suffix: suffix}) do
+    suffix
+  end
+
   def to_string(%__MODULE__{prefix: prefix, suffix: suffix}) do
     prefix <> "_" <> suffix
   end
@@ -142,8 +146,13 @@ defmodule TypeID do
   """
   @spec from_string!(String.t()) :: t() | no_return()
   def from_string!(str) do
-    [prefix, suffix] = String.split(str, "_")
-    from!(prefix, suffix)
+    case String.split(str, "_") do
+      [prefix, suffix] ->
+        from!(prefix, suffix)
+
+      [suffix] ->
+        from!("", suffix)
+    end
   end
 
   @doc """
@@ -168,7 +177,7 @@ defmodule TypeID do
   """
   @spec from_uuid!(prefix :: String.t(), uuid :: String.t()) :: t() | no_return()
   def from_uuid!(prefix, uuid) do
-    {:ok, %Uniq.UUID{bytes: uuid_bytes, version: 7}} = Uniq.UUID.parse(uuid)
+    uuid_bytes = Uniq.UUID.string_to_binary!(uuid)
     from_uuid_bytes!(prefix, uuid_bytes)
   end
 

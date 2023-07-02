@@ -33,7 +33,8 @@ defmodule TypeID.MixProject do
   defp deps do
     [
       {:uniq, "~> 0.5.4"},
-      {:ex_doc, "~> 0.27", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.27", only: :dev, runtime: false},
+      {:yaml_elixir, "~> 2.9", only: [:dev, :test], runtime: false}
     ]
   end
 end
