@@ -147,11 +147,14 @@ defmodule TypeID do
   @spec from_string!(String.t()) :: t() | no_return()
   def from_string!(str) do
     case String.split(str, "_") do
-      [prefix, suffix] ->
+      [prefix, suffix] when prefix != "" ->
         from!(prefix, suffix)
 
       [suffix] ->
         from!("", suffix)
+
+      _ -> 
+        raise ArgumentError, "invalid TypeID"
     end
   end
 

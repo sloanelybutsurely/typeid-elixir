@@ -20,6 +20,8 @@ defmodule TypeID.Base32 do
       do_encode(c23)::8, do_encode(c24)::8, do_encode(c25)::8, do_encode(c26)::8>>
   end
 
+  def encode(_), do: :error
+
   @spec decode(binary()) :: {:ok, binary()} | :error
   def decode(string) when is_binary(string) do
     {:ok, decode!(string)}
@@ -38,6 +40,10 @@ defmodule TypeID.Base32 do
       do_decode(c15)::5, do_decode(c16)::5, do_decode(c17)::5, do_decode(c18)::5,
       do_decode(c19)::5, do_decode(c20)::5, do_decode(c21)::5, do_decode(c22)::5,
       do_decode(c23)::5, do_decode(c24)::5, do_decode(c25)::5, do_decode(c26)::5>>
+  end
+
+  def decode!(_) do
+    raise ArgumentError, "invalid base 32 suffix"
   end
 
   @compile {:inline, [do_encode: 1]}
