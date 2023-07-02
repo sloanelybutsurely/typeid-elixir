@@ -1,16 +1,17 @@
 defmodule TypeID.SpecTest do
   use ExUnit.Case
 
-  specs_path = :code.priv_dir(:typeid_elixir)
-               |> Path.join("/spec")
+  specs_path =
+    :code.priv_dir(:typeid_elixir)
+    |> Path.join("/spec")
 
   @valid_specs specs_path
                |> Path.join("/valid.yml")
                |> YamlElixir.read_from_file!()
 
   @invalid_specs specs_path
-               |> Path.join("/invalid.yml")
-               |> YamlElixir.read_from_file!()
+                 |> Path.join("/invalid.yml")
+                 |> YamlElixir.read_from_file!()
 
   describe "valid" do
     for %{"name" => name, "typeid" => typeid, "prefix" => prefix, "uuid" => uuid} <- @valid_specs do
@@ -23,7 +24,7 @@ defmodule TypeID.SpecTest do
   end
 
   describe "invalid" do
-    for %{"name" => name, "typeid" => typeid, "description" => desc } <- @invalid_specs do
+    for %{"name" => name, "typeid" => typeid, "description" => desc} <- @invalid_specs do
       test "#{name}: #{desc}" do
         assert :error = TypeID.from_string(unquote(typeid))
       end

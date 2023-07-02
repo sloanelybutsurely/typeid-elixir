@@ -153,7 +153,7 @@ defmodule TypeID do
       [suffix] ->
         from!("", suffix)
 
-      _ -> 
+      _ ->
         raise ArgumentError, "invalid TypeID"
     end
   end
