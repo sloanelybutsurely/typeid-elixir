@@ -1,17 +1,20 @@
 defmodule TypeID.MixProject do
   use Mix.Project
 
+  @version "0.2.0"
+
   def project do
     [
       app: :typeid_elixir,
-      version: "0.2.0",
+      version: @version,
       elixir: "~> 1.15",
       start_permanent: Mix.env() == :prod,
       description: description(),
       package: package(),
       deps: deps(),
       name: "TypeID Elixir",
-      source_url: "https://github.com/sloanelybutsurely/typeid-elixir"
+      source_url: "https://github.com/sloanelybutsurely/typeid-elixir",
+      docs: docs()
     ]
   end
 
@@ -27,6 +30,13 @@ defmodule TypeID.MixProject do
     [
       licenses: ["MIT"],
       links: %{"GitHub" => "https://github.com/sloanelybutsurely/typeid-elixir"}
+    ]
+  end
+
+  defp docs do
+    [
+      main: "TypeID",
+      extras: ["CHANGELOG.md"]
     ]
   end
 
