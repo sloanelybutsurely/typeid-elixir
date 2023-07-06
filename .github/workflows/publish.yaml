@@ -1,0 +1,68 @@
+name: Publish
+
+on:
+  release:
+    types: [publish]
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Set up Elixir
+      uses: erlef/setup-beam@v1
+      with:
+        otp-version: '26'
+        elixir-version: '1.15'
+
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Cache deps
+      id: cache-deps
+      uses: actions/cache@v3
+      env:
+        cache-name: cache-elixir-deps
+      with:
+        path: deps
+        key: ${{ runner.os }}-mix-${{ env.cache-name }}-${{ hashFiles('**/mix.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-mix-${{ env.cache-name }}-
+
+    - name: Cache compiled build
+      id: cache-build
+      uses: actions/cache@v3
+      env:
+        cache-name: cache-compiled-build
+      with:
+        path: _build
+        key: ${{ runner.os }}-mix-${{ env.cache-name }}-${{ hashFiles('**/mix.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-mix-${{ env.cache-name }}-
+          ${{ runner.os }}-mix-
+
+    - name: Clean to rule out incremental build as a source of flakiness
+      if: github.run_attempt != '1'
+      run: |
+        mix deps.clean --all
+        mix clean
+      shell: sh
+
+    - name: Install dependencies
+      run: mix deps.get
+
+    - name: Compiles without warnings
+      run: mix compile --warnings-as-errors
+
+    - name: Check Formatting
+      run: mix format --check-formatted
+
+    - name: Run tests
+      run: mix test
+
+    - name: Publish to Hex
+      run: mix hex.publish --yes
+      env:
+        HEX_API_KEY: ${{ secrets.HEX_API_KEY }}
