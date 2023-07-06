@@ -14,16 +14,15 @@ permissions:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     name: Test on OTP ${{matrix.pair.otp}} / Elixir ${{matrix.pair.elixir}}
     strategy:
-      # Specify the OTP and Elixir versions to use when building
-      # and running the workflow steps.
+      fail-fast: false
       matrix:
         include:
           - pair:
               elixir: '1.11'
-              otp: '22'
+              otp: '21'
           - pair:
               elixir: '1.15'
               otp: '26'
