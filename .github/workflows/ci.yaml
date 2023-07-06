@@ -23,10 +23,10 @@ jobs:
         include:
           - pair:
               elixir: '1.11'
-              otp: '21'
+              otp: '22'
           - pair:
-              elixir: '1.15.0'
-              otp: '26.0.2'
+              elixir: '1.15'
+              otp: '26'
             lint: lint
     steps:
     # Step: Setup Elixir + Erlang image as the base.
