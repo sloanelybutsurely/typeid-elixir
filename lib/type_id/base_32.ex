@@ -33,7 +33,8 @@ defmodule TypeID.Base32 do
   def decode!(
         <<c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15, c16, c17, c18, c19,
           c20, c21, c22, c23, c24, c25, c26>>
-      ) do
+      )
+      when c1 in ?0..?7 do
     <<do_decode(c1)::3, do_decode(c2)::5, do_decode(c3)::5, do_decode(c4)::5, do_decode(c5)::5,
       do_decode(c6)::5, do_decode(c7)::5, do_decode(c8)::5, do_decode(c9)::5, do_decode(c10)::5,
       do_decode(c11)::5, do_decode(c12)::5, do_decode(c13)::5, do_decode(c14)::5,
