@@ -1,8 +1,9 @@
 # Changelog
 
-## 0.2.1
+## main
 
 - Include CHANGELOG in docs
+- Remove dependency on `Uniq`
 
 ## 0.2.0
 
