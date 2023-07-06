@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.2
+
+- Lower required Elixir version
+
 ## 0.2.1
 
 - Include CHANGELOG in docs
