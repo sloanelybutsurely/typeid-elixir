@@ -2,6 +2,7 @@ defmodule TypeID do
   @moduledoc File.cwd!() |> Path.join("README.md") |> File.read!()
 
   alias TypeID.Base32
+  alias TypeID.UUID
 
   @enforce_keys [:prefix, :suffix]
   defstruct @enforce_keys
@@ -26,7 +27,7 @@ defmodule TypeID do
   @spec new(prefix :: String.t()) :: t()
   def new(prefix) do
     suffix =
-      Uniq.UUID.uuid7(:raw)
+      UUID.uuid7()
       |> Base32.encode()
 
     %__MODULE__{prefix: prefix, suffix: suffix}
@@ -110,7 +111,7 @@ defmodule TypeID do
   def uuid(%__MODULE__{} = tid) do
     tid
     |> uuid_bytes()
-    |> Uniq.UUID.to_string(:default)
+    |> UUID.binary_to_string()
   end
 
   @doc """
@@ -180,7 +181,7 @@ defmodule TypeID do
   """
   @spec from_uuid!(prefix :: String.t(), uuid :: String.t()) :: t() | no_return()
   def from_uuid!(prefix, uuid) do
-    uuid_bytes = Uniq.UUID.string_to_binary!(uuid)
+    uuid_bytes = UUID.string_to_binary(uuid)
     from_uuid_bytes!(prefix, uuid_bytes)
   end
 
