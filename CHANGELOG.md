@@ -1,5 +1,10 @@
 # Changelog
 
+## main
+
+- **BREAKING:** `type/1` has been renamed to `prefix/1`
+- `Ecto.ParameterizedType` implementation
+
 ## 0.2.2
 
 - Lower required Elixir version

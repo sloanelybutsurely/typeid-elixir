@@ -23,3 +23,18 @@ end
 ## Spec
 
 The original TypeID spec is defined [here](https://github.com/jetpack-io/typeid).
+
+## Usage with Ecto
+
+`TypeID` implements the `Ecto.ParameterizedType` behaviour so you can use
+TypeIDs as fields in your Ecto schemas.
+
+```elixir
+defmodule MyApp.Accounts.User do
+  use Ecto.Schema
+
+  @primary_key {:id, TypeID, autogenerate: true, prefix: "acct", type: :binary_id}
+
+  # ...
+end
+```

@@ -6,14 +6,14 @@ defmodule TypeIDTest do
     test "returns a new TypeID struct" do
       tid = TypeID.new("test")
       assert is_struct(tid, TypeID)
-      assert "test" == TypeID.type(tid)
+      assert "test" == TypeID.prefix(tid)
     end
   end
 
-  describe "type/1" do
-    test "returns the type (prefix) of the given TypeID" do
+  describe "prefix/1" do
+    test "returns the prefix of the given TypeID" do
       tid = TypeID.from_string!("test_01h44had5rfswbvpc383ktj0aa")
-      assert "test" == TypeID.type(tid)
+      assert "test" == TypeID.prefix(tid)
     end
   end
 
@@ -60,7 +60,7 @@ defmodule TypeIDTest do
 
   test "verification" do
     tid = TypeID.from_string!("test_01h44yssjcf5daefvfr0yb70s8")
-    assert "test" == TypeID.type(tid)
+    assert "test" == TypeID.prefix(tid)
     assert "018909ec-e64c-795a-a73f-6fc03cb38328" == TypeID.uuid(tid)
   end
 end
