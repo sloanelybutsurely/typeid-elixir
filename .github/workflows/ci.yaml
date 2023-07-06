@@ -15,20 +15,26 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: Test on OTP ${{matrix.otp}} / Elixir ${{matrix.elixir}}
+    name: Test on OTP ${{matrix.pair.otp}} / Elixir ${{matrix.pair.elixir}}
     strategy:
       # Specify the OTP and Elixir versions to use when building
       # and running the workflow steps.
       matrix:
-        otp: ['26.0.2']       # Define the OTP version [required]
-        elixir: ['1.15.0']    # Define the elixir version [required]
+        include:
+          - pair:
+              elixir: '1.11'
+              otp: '21'
+          - pair:
+              elixir: '1.15.0'
+              otp: '26.0.2'
+            lint: lint
     steps:
     # Step: Setup Elixir + Erlang image as the base.
     - name: Set up Elixir
       uses: erlef/setup-beam@v1
       with:
-        otp-version: ${{matrix.otp}}
-        elixir-version: ${{matrix.elixir}}
+        otp-version: ${{matrix.pair.otp}}
+        elixir-version: ${{matrix.pair.elixir}}
 
     # Step: Check out the code.
     - name: Checkout code
@@ -83,12 +89,14 @@ jobs:
     # Customize this step if a different behavior is desired.
     - name: Compiles without warnings
       run: mix compile --warnings-as-errors
+      if: ${{ matrix.lint }}
 
     # Step: Check that the checked in code has already been formatted.
     # This step fails if something was found unformatted.
     # Customize this step as desired.
     - name: Check Formatting
       run: mix format --check-formatted
+      if: ${{ matrix.lint }}
 
     # Step: Execute the tests.
     - name: Run tests
