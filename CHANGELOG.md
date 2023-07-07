@@ -1,6 +1,12 @@
 # Changelog
 
-## main
+## 0.3.1
+
+- Implements `String.Chars` protocol
+- Implements `Phoenix.HTML.Safe` protocol
+- Implements `Phoenix.Param` protocol
+
+## 0.3.0
 
 - **BREAKING:** `type/1` has been renamed to `prefix/1`
 - `Ecto.ParameterizedType` implementation

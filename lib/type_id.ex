@@ -68,6 +68,30 @@ defmodule TypeID do
   end
 
   @doc """
+  Returns an `t:iodata/0` representation of the given `t:t/0`.
+
+  ### Examples
+
+      iex> tid = TypeID.from_string!("player_01h4rn40ybeqws3gfp073jt81b")
+      iex> TypeID.to_iodata(tid)
+      ["player", "_", "01h4rn40ybeqws3gfp073jt81b"]
+
+
+      iex> tid = TypeID.from_string!("01h4rn40ybeqws3gfp073jt81b")
+      iex> TypeID.to_iodata(tid)
+      "01h4rn40ybeqws3gfp073jt81b"
+
+  """
+  @spec to_iodata(tid :: t()) :: iodata()
+  def to_iodata(%__MODULE__{prefix: "", suffix: suffix}) do
+    suffix
+  end
+
+  def to_iodata(%__MODULE__{prefix: prefix, suffix: suffix}) do
+    [prefix, "_", suffix]
+  end
+
+  @doc """
   Returns a string representation of the given `t:t/0`
 
   ### Example
@@ -78,12 +102,10 @@ defmodule TypeID do
 
   """
   @spec to_string(tid :: t()) :: String.t()
-  def to_string(%__MODULE__{prefix: "", suffix: suffix}) do
-    suffix
-  end
-
-  def to_string(%__MODULE__{prefix: prefix, suffix: suffix}) do
-    prefix <> "_" <> suffix
+  def to_string(%__MODULE__{} = tid) do
+    tid
+    |> to_iodata()
+    |> IO.iodata_to_binary()
   end
 
   @doc """
@@ -334,5 +356,21 @@ defimpl Inspect, for: TypeID do
 
   def inspect(tid, _opts) do
     concat(["#TypeID<\"", TypeID.to_string(tid), "\">"])
+  end
+end
+
+defimpl String.Chars, for: TypeID do
+  defdelegate to_string(tid), to: TypeID
+end
+
+if Code.ensure_loaded?(Phoenix.HTML.Safe) do
+  defimpl Phoenix.HTML.Safe, for: TypeID do
+    defdelegate to_iodata(tid), to: TypeID
+  end
+end
+
+if Code.ensure_loaded?(Phoenix.Param) do
+  defimpl Phoenix.Param, for: TypeID do
+    defdelegate to_param(tid), to: TypeID, as: :to_string
   end
 end
