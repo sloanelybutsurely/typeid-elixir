@@ -15,6 +15,8 @@ defmodule TypeID do
             suffix: String.t()
           }
 
+  @seperator ?_
+
   @doc """
   Generates a new `t:t/0` with the given prefix.
 
@@ -74,7 +76,7 @@ defmodule TypeID do
 
       iex> tid = TypeID.from_string!("player_01h4rn40ybeqws3gfp073jt81b")
       iex> TypeID.to_iodata(tid)
-      ["player", "_", "01h4rn40ybeqws3gfp073jt81b"]
+      ["player", ?_, "01h4rn40ybeqws3gfp073jt81b"]
 
 
       iex> tid = TypeID.from_string!("01h4rn40ybeqws3gfp073jt81b")
@@ -88,7 +90,7 @@ defmodule TypeID do
   end
 
   def to_iodata(%__MODULE__{prefix: prefix, suffix: suffix}) do
-    [prefix, "_", suffix]
+    [prefix, @seperator, suffix]
   end
 
   @doc """
@@ -173,7 +175,7 @@ defmodule TypeID do
   """
   @spec from_string!(String.t()) :: t() | no_return()
   def from_string!(str) do
-    case String.split(str, "_") do
+    case String.split(str, <<@seperator>>) do
       [prefix, suffix] when prefix != "" ->
         from!(prefix, suffix)
 
@@ -372,5 +374,11 @@ end
 if Code.ensure_loaded?(Phoenix.Param) do
   defimpl Phoenix.Param, for: TypeID do
     defdelegate to_param(tid), to: TypeID, as: :to_string
+  end
+end
+
+if Code.ensure_loaded?(Jason.Encoder) do
+  defimpl Jason.Encoder, for: TypeID do
+    def encode(tid, _opts), do: [?", TypeID.to_iodata(tid), ?"]
   end
 end

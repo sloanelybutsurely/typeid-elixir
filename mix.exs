@@ -1,7 +1,7 @@
 defmodule TypeID.MixProject do
   use Mix.Project
 
-  @version "0.3.1"
+  @version "0.4.0"
 
   def project do
     [
@@ -14,7 +14,8 @@ defmodule TypeID.MixProject do
       deps: deps(),
       name: "TypeID Elixir",
       source_url: "https://github.com/sloanelybutsurely/typeid-elixir",
-      docs: docs()
+      docs: docs(),
+      consolidate_protocols: Mix.env() != :test
     ]
   end
 
@@ -45,6 +46,7 @@ defmodule TypeID.MixProject do
       {:ecto, "~> 3.10", only: [:dev, :test], optional: true},
       {:phoenix_html, "~> 3.3", only: [:dev, :test], optional: true},
       {:phoenix, "~> 1.7", only: [:dev, :test], optional: true},
+      {:jason, "~> 1.4", only: [:dev, :test], optional: true},
       {:ex_doc, "~> 0.27", only: :dev, runtime: false},
       {:yaml_elixir, "~> 2.9", only: [:dev, :test], runtime: false}
     ]

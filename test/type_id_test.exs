@@ -1,5 +1,5 @@
 defmodule TypeIDTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
   doctest TypeID, except: [new: 2]
 
   describe "new/1" do

@@ -1,5 +1,5 @@
 defmodule TypeID.SpecTest do
-  use ExUnit.Case
+  use ExUnit.Case, async: true
 
   specs_path =
     :code.priv_dir(:typeid_elixir)
