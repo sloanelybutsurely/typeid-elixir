@@ -1,8 +1,9 @@
 # Changelog
 
-## main
+## 0.3.1
 
 - Implements `String.Chars` protocol
+- Implements `Phoenix.HTML.Safe` protocol
 
 ## 0.3.0
 

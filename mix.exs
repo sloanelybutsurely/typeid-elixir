@@ -43,6 +43,7 @@ defmodule TypeID.MixProject do
   defp deps do
     [
       {:ecto, "~> 3.10", only: [:dev, :test], optional: true},
+      {:phoenix_html, "~> 3.3", only: [:dev, :test], optional: true},
       {:ex_doc, "~> 0.27", only: :dev, runtime: false},
       {:yaml_elixir, "~> 2.9", only: [:dev, :test], runtime: false}
     ]
