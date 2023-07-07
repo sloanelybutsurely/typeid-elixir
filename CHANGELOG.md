@@ -4,6 +4,11 @@
 
 - **BREAKING:** `type/1` has been renamed to `prefix/1`
 - `Ecto.ParameterizedType` implementation
+- `new/2` now accepts an optional keyword list to specify the UUID `time:` in unix milliseconds
+    ```elixir
+    iex> TypeID.new("test", time: 0)
+    #TypeID<"test_0000000000fq893mf5039xea5j">
+    ```
 
 ## 0.2.2
 

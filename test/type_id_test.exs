@@ -1,12 +1,21 @@
 defmodule TypeIDTest do
   use ExUnit.Case
-  doctest TypeID, except: [new: 1]
+  doctest TypeID, except: [new: 2]
 
   describe "new/1" do
     test "returns a new TypeID struct" do
       tid = TypeID.new("test")
       assert is_struct(tid, TypeID)
       assert "test" == TypeID.prefix(tid)
+    end
+  end
+
+  describe "new/2" do
+    test "allows setting the time" do
+      time = ~U[1950-12-17 00:00:00Z] |> DateTime.to_unix(:millisecond)
+      tid = TypeID.new("test", time: time)
+      assert "test" == TypeID.prefix(tid)
+      assert "7zegbdn300" <> _ = TypeID.suffix(tid)
     end
   end
 

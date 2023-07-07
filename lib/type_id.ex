@@ -18,6 +18,9 @@ defmodule TypeID do
   @doc """
   Generates a new `t:t/0` with the given prefix.
 
+  **Optional**: Specify the time of the UUID v7 by passing
+  `time: unix_millisecond_time` as the second argument.
+
   ### Example
 
       iex> TypeID.new("acct")
@@ -25,9 +28,10 @@ defmodule TypeID do
 
   """
   @spec new(prefix :: String.t()) :: t()
-  def new(prefix) do
+  @spec new(prefix :: String.t(), Keyword.t()) :: t()
+  def new(prefix, opts \\ []) do
     suffix =
-      UUID.uuid7()
+      UUID.uuid7(opts)
       |> Base32.encode()
 
     %__MODULE__{prefix: prefix, suffix: suffix}
