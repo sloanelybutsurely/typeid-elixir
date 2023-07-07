@@ -2,8 +2,6 @@
 
 [![CI](https://github.com/sloanelybutsurely/typeid-elixir/actions/workflows/ci.yaml/badge.svg)](https://github.com/sloanelybutsurely/typeid-elixir/actions/workflows/ci.yaml) [![Hex.pm](https://img.shields.io/hexpm/v/typeid_elixir.svg)](https://hex.pm/packages/typeid_elixir) [![Documentation](https://img.shields.io/badge/documentation-gray)](https://hexdocs.pm/typeid_elixir)
 
-Read the full documentation on [hexdocs](https://hexdocs.pm/typeid_elixir/TypeID.html)
-
 ### A type-safe, K-sortable, globally unique identifier inspired by Stripe IDs
 
 [TypeIDs](https://github.com/jetpack-io/typeid) are a modern, type-safe, globally unique identifier based on the upcoming UUIDv7 standard. They provide a ton of nice properties that make them a great choice as the primary identifiers for your data in a database, APIs, and distributed systems. Read more about TypeIDs in their spec.
