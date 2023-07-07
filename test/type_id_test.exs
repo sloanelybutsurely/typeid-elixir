@@ -1,19 +1,28 @@
 defmodule TypeIDTest do
   use ExUnit.Case
-  doctest TypeID, except: [new: 1]
+  doctest TypeID, except: [new: 2]
 
   describe "new/1" do
     test "returns a new TypeID struct" do
       tid = TypeID.new("test")
       assert is_struct(tid, TypeID)
-      assert "test" == TypeID.type(tid)
+      assert "test" == TypeID.prefix(tid)
     end
   end
 
-  describe "type/1" do
-    test "returns the type (prefix) of the given TypeID" do
+  describe "new/2" do
+    test "allows setting the time" do
+      time = ~U[1950-12-17 00:00:00Z] |> DateTime.to_unix(:millisecond)
+      tid = TypeID.new("test", time: time)
+      assert "test" == TypeID.prefix(tid)
+      assert "7zegbdn300" <> _ = TypeID.suffix(tid)
+    end
+  end
+
+  describe "prefix/1" do
+    test "returns the prefix of the given TypeID" do
       tid = TypeID.from_string!("test_01h44had5rfswbvpc383ktj0aa")
-      assert "test" == TypeID.type(tid)
+      assert "test" == TypeID.prefix(tid)
     end
   end
 
@@ -60,7 +69,7 @@ defmodule TypeIDTest do
 
   test "verification" do
     tid = TypeID.from_string!("test_01h44yssjcf5daefvfr0yb70s8")
-    assert "test" == TypeID.type(tid)
+    assert "test" == TypeID.prefix(tid)
     assert "018909ec-e64c-795a-a73f-6fc03cb38328" == TypeID.uuid(tid)
   end
 end
