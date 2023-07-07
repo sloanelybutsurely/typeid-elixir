@@ -4,6 +4,7 @@
 
 - Implements `String.Chars` protocol
 - Implements `Phoenix.HTML.Safe` protocol
+- Implements `Phoenix.Param` protocol
 
 ## 0.3.0
 

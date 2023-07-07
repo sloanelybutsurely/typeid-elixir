@@ -368,3 +368,9 @@ if Code.ensure_loaded?(Phoenix.HTML.Safe) do
     defdelegate to_iodata(tid), to: TypeID
   end
 end
+
+if Code.ensure_loaded?(Phoenix.Param) do
+  defimpl Phoenix.Param, for: TypeID do
+    defdelegate to_param(tid), to: TypeID, as: :to_string
+  end
+end
