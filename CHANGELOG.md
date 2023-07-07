@@ -2,6 +2,10 @@
 
 ## main
 
+- Implements `String.Chars` protocol
+
+## 0.3.0
+
 - **BREAKING:** `type/1` has been renamed to `prefix/1`
 - `Ecto.ParameterizedType` implementation
 - `new/2` now accepts an optional keyword list to specify the UUID `time:` in unix milliseconds

@@ -336,3 +336,7 @@ defimpl Inspect, for: TypeID do
     concat(["#TypeID<\"", TypeID.to_string(tid), "\">"])
   end
 end
+
+defimpl String.Chars, for: TypeID do
+  defdelegate to_string(tid), to: TypeID
+end
