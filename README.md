@@ -1,6 +1,6 @@
 # TypeID Elixir
 
-[![CI](https://github.com/sloanelybutsurely/typeid-elixir/actions/workflows/ci.yaml/badge.svg)](https://github.com/sloanelybutsurely/typeid-elixir/actions/workflows/ci.yaml)
+[![CI](https://github.com/sloanelybutsurely/typeid-elixir/actions/workflows/ci.yaml/badge.svg)](https://github.com/sloanelybutsurely/typeid-elixir/actions/workflows/ci.yaml) [![Hex.pm](https://img.shields.io/hexpm/v/typeid_elixir.svg)](https://hex.pm/packages/typeid_elixir) [![Documentation](https://img.shields.io/badge/documentation-gray)](https://hexdocs.pm/typeid_elixir)
 
 Read the full documentation on [hexdocs](https://hexdocs.pm/typeid_elixir/TypeID.html)
 
