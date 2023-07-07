@@ -15,7 +15,7 @@ The package can be installed from [hex](https://hex.pm/packages/typeid_elixir) b
 ```elixir
 def deps do
   [
-    {:typeid_elixir, "~> 0.2.2"}
+    {:typeid_elixir, "~> 0.3.0"}
   ]
 end
 ```
