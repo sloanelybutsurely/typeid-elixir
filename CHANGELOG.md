@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.0
+
+- Implements `Jason.Encoder` protocol
+- **BREAKING:** The `_` seperator is no longer encoded as a binary when returned by `TypeID.to_iodata/1` or protocols that use that function. This is unlikely to matter unless you are pattern matching on the shape of the returned iodata.
+
 ## 0.3.1
 
 - Implements `String.Chars` protocol
