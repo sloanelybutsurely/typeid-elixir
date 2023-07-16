@@ -32,7 +32,23 @@ defmodule MyApp.Accounts.User do
   use Ecto.Schema
 
   @primary_key {:id, TypeID, autogenerate: true, prefix: "acct", type: :binary_id}
+  @foreign_key_type TypeID
 
   # ...
 end
+```
+
+### Underlying types
+
+`TypeID`s can be stored as either `:string` or `:binary_id`. `:string` will
+store the entire TypeID including the prefix. `:binary_id` stores only the
+UUID portion and requires a `:uuid` or `:binary` column.
+
+#### Default type
+
+The type used can be set globally in the application config.
+
+```elixir
+config :typeid_elixir,
+  default_type: :binary_id
 ```
