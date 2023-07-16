@@ -86,7 +86,7 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
       field = Keyword.fetch!(opts, :field)
       default_type = Application.get_env(:typeid_elixir, :default_type, :string)
       type = Keyword.get(opts, :type, default_type)
-      prefix = Keyword.get(opts, :prefix, "")
+      prefix = Keyword.get(opts, :prefix)
 
       if primary_key do
         unless prefix && prefix =~ ~r/^[a-z]{0,63}$/ do
