@@ -275,81 +275,22 @@ defmodule TypeID do
     use Ecto.ParameterizedType
 
     @impl Ecto.ParameterizedType
-    def init(opts), do: validate_opts!(opts)
+    defdelegate init(opts), to: TypeID.Ecto
 
     @impl Ecto.ParameterizedType
-    def type(%{type: type}), do: type
+    defdelegate type(params), to: TypeID.Ecto
 
     @impl Ecto.ParameterizedType
-    def autogenerate(%{prefix: prefix}) do
-      new(prefix)
-    end
+    defdelegate autogenerate(params), to: TypeID.Ecto
 
     @impl Ecto.ParameterizedType
-    def cast(nil, _params), do: {:ok, nil}
-    def cast(%__MODULE__{prefix: prefix} = tid, %{prefix: prefix}), do: {:ok, tid}
-
-    def cast(str, %{prefix: prefix}) when is_binary(str) do
-      if String.starts_with?(str, prefix) do
-        from_string(str)
-      else
-        with {:ok, uuid} <- Ecto.UUID.cast(str) do
-          from_uuid(prefix, uuid)
-        end
-      end
-    end
-
-    def cast(_, _), do: :error
+    defdelegate cast(data, params), to: TypeID.Ecto
 
     @impl Ecto.ParameterizedType
-    def dump(nil, _dumper, _params), do: {:ok, nil}
-
-    def dump(%__MODULE__{prefix: prefix} = tid, _, %{prefix: prefix, type: :string}) do
-      {:ok, __MODULE__.to_string(tid)}
-    end
-
-    def dump(%__MODULE__{prefix: prefix} = tid, _, %{prefix: prefix, type: :binary_id}) do
-      {:ok, uuid(tid)}
-    end
-
-    def dump(_, _, _), do: :error
+    defdelegate dump(data, dumper, params), to: TypeID.Ecto
 
     @impl Ecto.ParameterizedType
-    def load(nil, _, _), do: {:ok, nil}
-
-    def load(str, _, %{type: :string, prefix: prefix}) do
-      with {:ok, %__MODULE__{prefix: ^prefix}} = loaded <- from_string(str) do
-        loaded
-      end
-    end
-
-    def load(<<_::128>> = uuid, _, %{type: :binary_id, prefix: prefix}) do
-      from_uuid_bytes(prefix, uuid)
-    end
-
-    def load(<<_::288>> = uuid, _, %{type: :binary_id, prefix: prefix}) do
-      from_uuid(prefix, uuid)
-    rescue
-      _ -> :error
-    end
-
-    def load(_, _, _), do: :error
-
-    defp validate_opts!(opts) do
-      type = Keyword.get(opts, :type, :string)
-      prefix = Keyword.get(opts, :prefix, "")
-
-      unless prefix && prefix =~ ~r/^[a-z]{0,63}$/ do
-        raise ArgumentError,
-              "must specify `prefix` using only lowercase letters between 0 and 63 characters long."
-      end
-
-      unless type in ~w[string binary_id]a do
-        raise ArgumentError, "`type` must be `:string` or `:binary_id`"
-      end
-
-      %{prefix: prefix, type: type}
-    end
+    defdelegate load(data, loader, params), to: TypeID.Ecto
   end
 end
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.0
+
+- `Ecto.ParameterizedType` implementation traverses associations so prefixes only need to be defined on schema primary keys
+- `Ecto.ParameterizedType` implementation `type` option can be set globally with a `default_type` Application configuration
+
 ## 0.4.0
 
 - Implements `Jason.Encoder` protocol
