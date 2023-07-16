@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.1
+
+- raises if `prefix` is not given when `primary_key: true`
+
 ## 0.5.0
 
 - `Ecto.ParameterizedType` implementation traverses associations so prefixes only need to be defined on schema primary keys
