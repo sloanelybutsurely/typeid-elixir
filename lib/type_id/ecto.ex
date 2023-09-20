@@ -86,6 +86,10 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
       field = Keyword.fetch!(opts, :field)
       default_type = Application.get_env(:typeid_elixir, :default_type, :string)
       type = Keyword.get(opts, :type, default_type)
+      # When tye type is supplied via belongs_to
+      # e.g. belongs_to :model, Model, type: TypeID
+      type = if(type == TypeID, do: default_type, else: type)
+
       prefix = Keyword.get(opts, :prefix)
 
       if primary_key do
