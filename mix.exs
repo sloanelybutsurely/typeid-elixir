@@ -1,7 +1,7 @@
 defmodule TypeID.MixProject do
   use Mix.Project
 
-  @version "0.5.2"
+  @version "0.5.3"
 
   def project do
     [
@@ -44,8 +44,8 @@ defmodule TypeID.MixProject do
   defp deps do
     [
       {:ecto, "~> 3.10", optional: true},
-      {:phoenix_html, "~> 3.3", optional: true},
-      {:phoenix, "~> 1.7", optional: true},
+      {:phoenix_html, "~> 4.0", optional: true},
+      {:phoenix, "~> 1.7.10", optional: true},
       {:jason, "~> 1.4", optional: true},
       {:ex_doc, "~> 0.27", only: :dev, runtime: false},
       {:yaml_elixir, "~> 2.9", only: [:dev, :test], runtime: false}
