@@ -86,6 +86,10 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
       field = Keyword.fetch!(opts, :field)
       default_type = Application.get_env(:typeid_elixir, :default_type, :string)
       type = Keyword.get(opts, :type, default_type)
+      # When tye type is supplied via belongs_to
+      # e.g. belongs_to :model, Model, type: TypeID
+      type = if(type == TypeID, do: default_type, else: type)
+
       prefix = Keyword.get(opts, :prefix)
 
       if primary_key do
@@ -99,14 +103,10 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
         raise ArgumentError, "`type` must be `:string` or `:binary_id`"
       end
 
-      if primary_key do
-        %{primary_key: primary_key, schema: schema, field: field, prefix: prefix, type: type}
-      else
-        %{schema: schema, field: field, type: type}
-      end
+      %{schema: schema, field: field, prefix: prefix, type: type}
     end
 
-    defp find_prefix(%{prefix: prefix}), do: prefix
+    defp find_prefix(%{prefix: prefix}) when not is_nil(prefix), do: prefix
 
     defp find_prefix(%{schema: schema, field: field}) do
       %{related: schema, related_key: field} = schema.__schema__(:association, field)
