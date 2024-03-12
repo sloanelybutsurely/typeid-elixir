@@ -44,7 +44,7 @@ defmodule TypeID.MixProject do
   defp deps do
     [
       {:ecto, "~> 3.10", optional: true},
-      {:phoenix_html, "~> 3.3", optional: true},
+      {:phoenix_html, "~> 3.3 or ~> 4.0", optional: true},
       {:phoenix, "~> 1.7", optional: true},
       {:jason, "~> 1.4", optional: true},
       {:ex_doc, "~> 0.27", only: :dev, runtime: false},
