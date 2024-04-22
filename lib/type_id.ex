@@ -181,10 +181,10 @@ defmodule TypeID do
 
     prefix =
       str
-      |> binary_slice(0, size - 26)
+      |> binary_part(0, size - 26)
       |> String.replace(~r/_$/, "")
 
-    suffix = binary_slice(str, size - 26, 26)
+    suffix = binary_part(str, size - 26, 26)
 
     if prefix == "" do
       raise ArgumentError, "A TypeID without a prefix should not have a leading underscore"
