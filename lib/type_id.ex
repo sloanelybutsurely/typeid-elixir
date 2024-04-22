@@ -174,17 +174,23 @@ defmodule TypeID do
   Like `from_string/1` but raises an error if the string is invalid.
   """
   @spec from_string!(String.t()) :: t() | no_return()
+  def from_string!(str) when byte_size(str) <= 26, do: from!("", str)
+
   def from_string!(str) do
-    case String.split(str, <<@seperator>>) do
-      [prefix, suffix] when prefix != "" ->
-        from!(prefix, suffix)
+    size = byte_size(str)
 
-      [suffix] ->
-        from!("", suffix)
+    prefix =
+      str
+      |> binary_slice(0, size - 26)
+      |> String.replace(~r/_$/, "")
 
-      _ ->
-        raise ArgumentError, "invalid TypeID"
+    suffix = binary_slice(str, size - 26, 26)
+
+    if prefix == "" do
+      raise ArgumentError, "A TypeID without a prefix should not have a leading underscore"
     end
+
+    from!(prefix, suffix)
   end
 
   @doc """
@@ -258,11 +264,26 @@ defmodule TypeID do
   end
 
   defp validate_prefix!(prefix) do
-    unless prefix =~ ~r/^[a-z]{0,63}$/ do
-      raise ArgumentError, "invalid prefix: #{prefix}. prefix should match [a-z]{0,63}"
-    end
+    cond do
+      String.starts_with?(prefix, "_") ->
+        invalid_prefix!(prefix, "cannot start with an underscore")
 
-    :ok
+      String.ends_with?(prefix, "_") ->
+        invalid_prefix!(prefix, "cannot end with an underscore")
+
+      byte_size(prefix) > 63 ->
+        invalid_prefix!(prefix, "cannot be more than 63 characters")
+
+      not Regex.match?(~r/^[a-z_]*$/, prefix) ->
+        invalid_prefix!(prefix, "can contain only lowercase letters and underscores")
+
+      true ->
+        :ok
+    end
+  end
+
+  defp invalid_prefix!(prefix, message) do
+    raise ArgumentError, "invalid prefix: #{prefix}. #{message}"
   end
 
   defp validate_suffix!(suffix) do
