@@ -31,7 +31,7 @@ TypeIDs as fields in your Ecto schemas.
 defmodule MyApp.Accounts.User do
   use Ecto.Schema
 
-  @primary_key {:id, TypeID, autogenerate: true, prefix: "acct", type: :binary_id}
+  @primary_key {:id, TypeID, autogenerate: true, prefix: "acct", type: :binary}
   @foreign_key_type TypeID
 
   # ...
@@ -40,9 +40,11 @@ end
 
 ### Underlying types
 
-`TypeID`s can be stored as either `:string` or `:binary_id`. `:string` will
-store the entire TypeID including the prefix. `:binary_id` stores only the
-UUID portion and requires a `:uuid` or `:binary` column.
+`TypeID`s can be stored as `:string`, `:binary_id`, or `:binary`. `:string` will
+store the entire TypeID including the prefix. `:binary` and `:binary_id` store
+only the UUID portion and require a `:uuid` or `:binary` column. `:binary_id`
+will use UUIDv4 (non K-sortable), whereas `:binary` will use UUIDv7, so
+`:binary` is recommended over `:binary_id` for that reason.
 
 #### Default type
 
@@ -50,5 +52,5 @@ The type used can be set globally in the application config.
 
 ```elixir
 config :typeid_elixir,
-  default_type: :binary_id
+  default_type: :binary
 ```
