@@ -48,7 +48,6 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
 
       case {tid.prefix, type} do
         {^prefix, :string} -> {:ok, TypeID.to_string(tid)}
-        {^prefix, :binary_id} -> {:ok, TypeID.uuid(tid)}
         {^prefix, :binary} -> {:ok, TypeID.uuid_bytes(tid)}
         _ -> :error
       end
@@ -67,12 +66,12 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
       end
     end
 
-    def load(<<_::128>> = uuid, _, %{type: type} = params) when type in [:binary_id, :binary] do
+    def load(<<_::128>> = uuid, _, %{type: :binary} = params) do
       prefix = find_prefix(params)
       TypeID.from_uuid_bytes(prefix, uuid)
     end
 
-    def load(<<_::288>> = uuid, _, %{type: type} = params) when type in [:binary_id, :binary] do
+    def load(<<_::288>> = uuid, _, %{type: :binary} = params) do
       prefix = find_prefix(params)
       TypeID.from_uuid(prefix, uuid)
     rescue
@@ -96,8 +95,8 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
         end
       end
 
-      unless type in ~w[string binary_id binary]a do
-        raise ArgumentError, "`type` must be `:string`, `:binary_id`, or `:binary`"
+      unless type in ~w[string binary]a do
+        raise ArgumentError, "`type` must be `:string` or `:binary`"
       end
 
       if primary_key do

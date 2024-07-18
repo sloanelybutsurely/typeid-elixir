@@ -40,11 +40,9 @@ end
 
 ### Underlying types
 
-`TypeID`s can be stored as `:string`, `:binary_id`, or `:binary`. `:string` will
-store the entire TypeID including the prefix. `:binary` and `:binary_id` store
-only the UUID portion and require a `:uuid` or `:binary` column. `:binary_id`
-will use UUIDv4 (non K-sortable), whereas `:binary` will use UUIDv7, so
-`:binary` is recommended over `:binary_id` for that reason.
+`TypeID`s can be stored as either `:string` or `:binary`. `:string` will store
+the entire TypeID including the prefix. `:binary` stores only the UUID portion
+and requires a `:uuid` or `:binary` column.
 
 #### Default type
 
