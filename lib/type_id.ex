@@ -263,7 +263,7 @@ defmodule TypeID do
     ArgumentError -> :error
   end
 
-  defp validate_prefix!(prefix) do
+  def validate_prefix!(prefix) do
     cond do
       String.starts_with?(prefix, "_") ->
         invalid_prefix!(prefix, "cannot start with an underscore")

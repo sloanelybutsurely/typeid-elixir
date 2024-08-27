@@ -89,10 +89,7 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
       prefix = Keyword.get(opts, :prefix)
 
       if primary_key do
-        unless prefix && prefix =~ ~r/^[a-z]{0,63}$/ do
-          raise ArgumentError,
-                "must specify `prefix` using only lowercase letters between 0 and 63 characters long."
-        end
+        TypeID.validate_prefix!(prefix)
       end
 
       unless type in ~w[string binary]a do
