@@ -1,14 +1,18 @@
 if Code.ensure_loaded?(Ecto.ParameterizedType) do
   defmodule TypeID.Ecto do
+    @behaviour Ecto.ParameterizedType
     @moduledoc false
 
     @doc false
+    @impl true
     def init(opts), do: validate_opts!(opts)
 
     @doc false
+    @impl true
     def type(%{type: type}), do: type
 
     @doc false
+    @impl true
     def autogenerate(params) do
       params
       |> find_prefix()
@@ -16,6 +20,7 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
     end
 
     @doc false
+    @impl true
     def cast(nil, _params), do: {:ok, nil}
 
     def cast(%TypeID{prefix: prefix} = tid, params) do
@@ -41,6 +46,7 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
     def cast(_, _), do: :error
 
     @doc false
+    @impl true
     def dump(nil, _dumper, _params), do: {:ok, nil}
 
     def dump(%TypeID{} = tid, _, %{type: type} = params) do
@@ -48,14 +54,23 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
 
       case {tid.prefix, type} do
         {^prefix, :string} -> {:ok, TypeID.to_string(tid)}
-        {^prefix, :binary} -> {:ok, TypeID.uuid_bytes(tid)}
+        {^prefix, :uuid} -> {:ok, TypeID.uuid_bytes(tid)}
         _ -> :error
       end
     end
 
     def dump(_, _, _), do: :error
 
+    @impl true
+    def embed_as(_format, _params) do
+      :self
+    end
+
+    @impl true
+    def equal?(term1, term2, _params), do: term1 == term2
+
     @doc false
+    @impl true
     def load(nil, _, _), do: {:ok, nil}
 
     def load(str, _, %{type: :string} = params) do
@@ -66,12 +81,12 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
       end
     end
 
-    def load(<<_::128>> = uuid, _, %{type: :binary} = params) do
+    def load(<<_::128>> = uuid, _, %{type: :uuid} = params) do
       prefix = find_prefix(params)
       TypeID.from_uuid_bytes(prefix, uuid)
     end
 
-    def load(<<_::288>> = uuid, _, %{type: :binary} = params) do
+    def load(<<_::288>> = uuid, _, %{type: :uuid} = params) do
       prefix = find_prefix(params)
       TypeID.from_uuid(prefix, uuid)
     rescue
@@ -92,8 +107,8 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
         TypeID.validate_prefix!(prefix)
       end
 
-      unless type in ~w[string binary]a do
-        raise ArgumentError, "`type` must be `:string` or `:binary`"
+      unless type in ~w[string uuid]a do
+        raise ArgumentError, "`type` must be `:string` or `:uuid`"
       end
 
       if primary_key do
@@ -107,7 +122,13 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
 
     defp find_prefix(%{schema: schema, field: field}) do
       %{related: schema, related_key: field} = schema.__schema__(:association, field)
-      {:parameterized, TypeID, %{prefix: prefix}} = schema.__schema__(:type, field)
+
+      prefix =
+        case schema.__schema__(:type, field) do
+          {:parameterized, {TypeID, %{prefix: prefix}}} -> prefix
+          {:parameterized, TypeID, %{prefix: prefix}} -> prefix
+          _ -> nil
+        end
 
       prefix
     end
