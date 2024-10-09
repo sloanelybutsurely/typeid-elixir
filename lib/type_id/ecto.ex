@@ -9,7 +9,7 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
 
     @doc false
     @impl true
-    def type(%{type: type}), do: type
+    def type(%{column_type: column_type}), do: column_type
 
     @doc false
     @impl true
@@ -49,10 +49,10 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
     @impl true
     def dump(nil, _dumper, _params), do: {:ok, nil}
 
-    def dump(%TypeID{} = tid, _, %{type: type} = params) do
+    def dump(%TypeID{} = tid, _, %{column_type: column_type} = params) do
       prefix = find_prefix(params)
 
-      case {tid.prefix, type} do
+      case {tid.prefix, column_type} do
         {^prefix, :string} -> {:ok, TypeID.to_string(tid)}
         {^prefix, :uuid} -> {:ok, TypeID.uuid_bytes(tid)}
         _ -> :error
@@ -73,7 +73,7 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
     @impl true
     def load(nil, _, _), do: {:ok, nil}
 
-    def load(str, _, %{type: :string} = params) do
+    def load(str, _, %{column_type: :string} = params) do
       prefix = find_prefix(params)
 
       with {:ok, %TypeID{prefix: ^prefix}} = loaded <- TypeID.from_string(str) do
@@ -81,12 +81,12 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
       end
     end
 
-    def load(<<_::128>> = uuid, _, %{type: :uuid} = params) do
+    def load(<<_::128>> = uuid, _, %{column_type: :uuid} = params) do
       prefix = find_prefix(params)
       TypeID.from_uuid_bytes(prefix, uuid)
     end
 
-    def load(<<_::288>> = uuid, _, %{type: :uuid} = params) do
+    def load(<<_::288>> = uuid, _, %{column_type: :uuid} = params) do
       prefix = find_prefix(params)
       TypeID.from_uuid(prefix, uuid)
     rescue
@@ -99,22 +99,28 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
       primary_key = Keyword.get(opts, :primary_key, false)
       schema = Keyword.fetch!(opts, :schema)
       field = Keyword.fetch!(opts, :field)
-      default_type = Application.get_env(:typeid_elixir, :default_type, :string)
-      type = Keyword.get(opts, :type, default_type)
+      default_column_type = Application.get_env(:typeid_elixir, :default_column_type, :string)
+      column_type = Keyword.get(opts, :column_type, default_column_type)
       prefix = Keyword.get(opts, :prefix)
 
       if primary_key do
         TypeID.validate_prefix!(prefix)
       end
 
-      unless type in ~w[string uuid]a do
-        raise ArgumentError, "`type` must be `:string` or `:uuid`"
+      unless column_type in ~w[string uuid]a do
+        raise ArgumentError, "`column_type` must be `:string` or `:uuid`"
       end
 
       if primary_key do
-        %{primary_key: primary_key, schema: schema, field: field, prefix: prefix, type: type}
+        %{
+          primary_key: primary_key,
+          schema: schema,
+          field: field,
+          prefix: prefix,
+          column_type: column_type
+        }
       else
-        %{schema: schema, field: field, type: type}
+        %{schema: schema, field: field, column_type: column_type}
       end
     end
 
