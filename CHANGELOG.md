@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.0.0
+
+### What's Changed
+* allow binary type by @dnsbty in https://github.com/sloanelybutsurely/typeid-elixir/pull/32
+* Fix prefix validation in Ecto type by @andrewtimberlake in https://github.com/sloanelybutsurely/typeid-elixir/pull/35
+* Change default type to uuid by @andrewtimberlake in https://github.com/sloanelybutsurely/typeid-elixir/pull/34
+
+### New Contributors
+* @dnsbty made their first contribution in https://github.com/sloanelybutsurely/typeid-elixir/pull/32
+* @andrewtimberlake made their first contribution in https://github.com/sloanelybutsurely/typeid-elixir/pull/35
+
+**Full Changelog**: https://github.com/sloanelybutsurely/typeid-elixir/compare/0.6.0...1.0.0
+
 ## 0.5.1
 
 - raises if `prefix` is not given when `primary_key: true`
