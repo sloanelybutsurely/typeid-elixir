@@ -1,5 +1,14 @@
 # Changelog
 
+<!-- https://keepachangelog.com/en/1.1.0/ -->
+
+## Unreleased
+
+### Added
+
+- The `prefix` option can be used to set the prefix on Ecto fields that are not
+  primary keys or foreign keys. (#39, @lurodrigo)
+
 ## 1.0.0
 
 ### What's Changed
