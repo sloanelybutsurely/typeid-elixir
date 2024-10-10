@@ -4,6 +4,10 @@
 
 ## Unreleased
 
+
+
+## 1.1.0
+
 ### Added
 
 - The `prefix` option can be used to set the prefix on Ecto fields that are not
