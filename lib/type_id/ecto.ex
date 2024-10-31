@@ -95,20 +95,41 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
 
     def load(_, _, _), do: :error
 
+    defp validate_type!(type) do
+      unless type in ~w[string uuid]a do
+        raise ArgumentError, "`type` must be `:string` or `:uuid`"
+      end
+
+      type
+    end
+
+    defp get_type(opts) do
+      default_type = Application.get_env(:typeid_elixir, :default_type, :string)
+
+      case Keyword.get(opts, :column_type) do
+        nil ->
+          opts
+          |> Keyword.get(:type, default_type)
+          |> case do
+            TypeID -> default_type
+            type -> type
+          end
+          |> validate_type!()
+
+        type ->
+          validate_type!(type)
+      end
+    end
+
     defp validate_opts!(opts) do
       primary_key = Keyword.get(opts, :primary_key, false)
       schema = Keyword.fetch!(opts, :schema)
       field = Keyword.fetch!(opts, :field)
-      default_type = Application.get_env(:typeid_elixir, :default_type, :string)
-      type = Keyword.get(opts, :type, default_type)
       prefix = Keyword.get(opts, :prefix)
+      type = get_type(opts)
 
       if primary_key do
         TypeID.validate_prefix!(prefix)
-      end
-
-      unless type in ~w[string uuid]a do
-        raise ArgumentError, "`type` must be `:string` or `:uuid`"
       end
 
       if primary_key do
