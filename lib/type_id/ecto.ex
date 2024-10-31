@@ -122,7 +122,6 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
     end
 
     defp validate_opts!(opts) do
-      IO.inspect(opts)
       primary_key = Keyword.get(opts, :primary_key, false)
       schema = Keyword.fetch!(opts, :schema)
       field = Keyword.fetch!(opts, :field)
@@ -138,7 +137,6 @@ if Code.ensure_loaded?(Ecto.ParameterizedType) do
       else
         %{schema: schema, field: field, type: type, prefix: prefix}
       end
-      |> IO.inspect()
     end
 
     defp find_prefix(%{prefix: prefix}) when not is_nil(prefix), do: prefix
