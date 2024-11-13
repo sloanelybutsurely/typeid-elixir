@@ -8,9 +8,11 @@ defmodule TypeID.MixProject do
       app: :typeid_elixir,
       version: @version,
       elixir: "~> 1.11",
+      elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       description: description(),
       package: package(),
+      aliases: aliases(),
       deps: deps(),
       name: "TypeID Elixir",
       source_url: "https://github.com/sloanelybutsurely/typeid-elixir",
@@ -22,6 +24,9 @@ defmodule TypeID.MixProject do
   def application do
     [extra_applications: [:logger]]
   end
+
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
 
   defp description do
     "A type-safe, K-sortable, globally unique identifier inspired by Stripe IDs"
@@ -48,7 +53,15 @@ defmodule TypeID.MixProject do
       {:phoenix, "~> 1.7", optional: true},
       {:jason, "~> 1.4", optional: true},
       {:ex_doc, "~> 0.27", only: :dev, runtime: false},
-      {:yaml_elixir, "~> 2.9", only: [:dev, :test], runtime: false}
+      {:yaml_elixir, "~> 2.9", only: [:dev, :test], runtime: false},
+      {:ecto_sql, "~> 3.10", only: [:dev, :test]},
+      {:postgrex, "~> 0.17", only: [:dev, :test]}
+    ]
+  end
+
+  defp aliases do
+    [
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
     ]
   end
 end
